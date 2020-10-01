@@ -3,6 +3,8 @@ package com.meujogo.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.meujogo.cm.excecao.ExplosaoException;
+
 public class Campo {
 
 	private final int linha;
@@ -37,7 +39,37 @@ public class Campo {
 		} else {
 			return false;
 		}
+	} // fim adicionarVizinho
 
-	}
+	void alternarMarcacao() {
+		if (!aberto) {
+			marcado = !marcado;
+		}
+	} // fim alternarMarcacao
+
+	boolean abrir() {
+		if (!aberto && !marcado) {
+			aberto = true;
+
+			if (minado) {
+				throw new ExplosaoException();
+			} // fim if do minado
+
+			if (vizinhancaSegura()) {
+				vizinhos.forEach(v -> v.abrir());
+			} // fim if vizinhancaSegura
+
+			return true;
+
+		} // fim if !aberto && !marcado
+		else {
+			return false;
+		}
+	} // fim abrir
+
+	boolean vizinhancaSegura() {
+		return vizinhos.stream().noneMatch(v -> v.minado);
+
+	} // fim vizinhancaSegura
 
 }
