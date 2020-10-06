@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.meujogo.cm.excecao.ExplosaoException;
+
 public class Tabuleiro {
 
 	private int linhas;
@@ -22,19 +24,20 @@ public class Tabuleiro {
 		sortearMinas();
 
 	} // fim construtor
-	
+
 	public void abrir(int linha, int coluna) {
-		campos.parallelStream()
-		.filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
-		.findFirst()
-		.ifPresent(c -> c.abrir());		
+		try {
+			campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
+					.ifPresent(c -> c.abrir());
+		} catch (ExplosaoException e) {
+			campos.forEach(c -> c.setAberto(true));
+			throw e;
+		}
 	} // fim abrir
-	
+
 	public void alternarMarcacao(int linha, int coluna) {
-		campos.parallelStream()
-		.filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
-		.findFirst()
-		.ifPresent(c -> c.alternarMarcacao());		
+		campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
+				.ifPresent(c -> c.alternarMarcacao());
 	} // fim AlternarMarcacao
 
 	private void gerarCampos() {
@@ -57,11 +60,11 @@ public class Tabuleiro {
 	private void sortearMinas() {
 		long minasArmadas = 0;
 		Predicate<Campo> minado = c -> c.isMinado();
-		
+
 		do {
-			minasArmadas = campos.stream().filter(minado).count();
 			int aleatorio = (int) (Math.random() * campos.size());
 			campos.get(aleatorio).minar();
+			minasArmadas = campos.stream().filter(minado).count();
 		} while (minasArmadas < minas);
 	} // sortearMinas
 
@@ -77,8 +80,15 @@ public class Tabuleiro {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		int i =0;
+		
+		sb.append("  ");
+		for (int c = 0; c < colunas; c++) {
+			sb.append(" " + c + " ");
+		}
+		sb.append("\n");
+		int i = 0;
 		for (int l = 0; l < linhas; l++) {
+			sb.append(l + " ");
 			for (int c = 0; c < colunas; c++) {
 				sb.append(" ");
 				sb.append(campos.get(i));
@@ -87,7 +97,7 @@ public class Tabuleiro {
 			} // for c
 			sb.append("\n");
 		} // for l
-		
+
 		return sb.toString();
 	} // fim toString
 }

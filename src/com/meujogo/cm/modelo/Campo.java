@@ -83,13 +83,17 @@ public class Campo {
 		return marcado;
 	} // fim isMarcado
 
+	void setAberto(boolean aberto) {
+		this.aberto = aberto;
+	} // setAberto
+
 	public boolean isAberto() {
 		return aberto;
 	} // fim isAberto
 
 	public boolean isFechado() {
 		return !isAberto();
-	} // fim fechado
+	}
 
 	public int getLinha() {
 		return linha;
