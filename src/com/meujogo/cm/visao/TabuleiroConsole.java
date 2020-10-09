@@ -28,7 +28,7 @@ public class TabuleiroConsole {
 				if ("n".equalsIgnoreCase(resposta)) {
 					continuar = false;
 				} else {
-					tabuleiro.reiniciar();
+					tabuleiro.reiniciarTabuleiro();
 				}
 
 			}
@@ -41,7 +41,7 @@ public class TabuleiroConsole {
 
 	private void cicloDoJogo() {
 		try {
-			while (!tabuleiro.objetivoAlcancado()) {
+			while (!tabuleiro.objetivoAlcancadoTabuleiro()) {
 				System.out.println(tabuleiro);
 				String digitado = capturarValorDigitado("Digite (x,y): ");
 

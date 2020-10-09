@@ -7,27 +7,28 @@ import com.meujogo.cm.excecao.ExplosaoException;
 
 public class Campo {
 
-	private final int linha;
-	private final int coluna;
+	private final int linhaCampo;
+	private final int colunaCampo;
 
-	private boolean aberto = false;
-	private boolean minado = false;
-	private boolean marcado = false;
+	// Caracteristicas do Campo
+	private boolean abertoCampo = false;
+	private boolean minadoCampo = false;
+	private boolean marcadoCampo = false;
 
 	private List<Campo> vizinhos = new ArrayList<>();
 
 	public Campo(int linha, int coluna) {
-		this.linha = linha;
-		this.coluna = coluna;
-	}
+		this.linhaCampo = linha;
+		this.colunaCampo = coluna;
+	} // fim construtor
 
-	boolean adicionarVizinho(Campo candidatoVizinho) {
-		boolean linhaDiferente = (linha != candidatoVizinho.linha);
-		boolean colunaDiferente = (coluna != candidatoVizinho.coluna);
+	boolean adicionarVizinhoCampo(Campo candidatoVizinho) {
+		boolean linhaDiferente = (linhaCampo != candidatoVizinho.linhaCampo);
+		boolean colunaDiferente = (colunaCampo != candidatoVizinho.colunaCampo);
 		boolean diagonal = linhaDiferente && colunaDiferente;
 
-		int deltaLinha = Math.abs(linha - candidatoVizinho.linha);
-		int deltaColuna = Math.abs(coluna - candidatoVizinho.coluna);
+		int deltaLinha = Math.abs(linhaCampo - candidatoVizinho.linhaCampo);
+		int deltaColuna = Math.abs(colunaCampo - candidatoVizinho.colunaCampo);
 		int deltaGeral = deltaLinha + deltaColuna;
 
 		if (deltaGeral == 1 && !diagonal) {
@@ -39,98 +40,98 @@ public class Campo {
 		} else {
 			return false;
 		}
-	} // fim adicionarVizinho
+	} // fim adicionarVizinhoCampo
 
-	void alternarMarcacao() {
-		if (!aberto) {
-			marcado = !marcado;
+	void alternarMarcacaoCampo() {
+		if (!abertoCampo) {
+			marcadoCampo = !marcadoCampo;
 		}
-	} // fim alternarMarcacao
+	} // fim alternarMarcacaoCampo
 
-	boolean abrir() {
-		if (!aberto && !marcado) {
-			aberto = true;
+	boolean abrirCampo() {
+		if (!abertoCampo && !marcadoCampo) {
+			abertoCampo = true;
 
-			if (minado) {
+			if (minadoCampo) {
 				throw new ExplosaoException();
-			} // fim if do minado
+			} // fim if do campoMinado
 
-			if (vizinhancaSegura()) {
-				vizinhos.forEach(v -> v.abrir());
+			if (vizinhancaSeguraCampo()) {
+				vizinhos.forEach(v -> v.abrirCampo());
 			} // fim if vizinhancaSegura
 
 			return true;
 
-		} // fim if !aberto && !marcado
+		} // fim if !abertoCampo && !marcadoCampo
 		else {
 			return false;
 		}
-	} // fim abrir
+	} // fim abrirCampo
 
-	boolean vizinhancaSegura() {
-		return vizinhos.stream().noneMatch(v -> v.minado);
-	} // fim vizinhancaSegura
+	boolean vizinhancaSeguraCampo() {
+		return vizinhos.stream().noneMatch(v -> v.minadoCampo);
+	} // fim vizinhancaSeguraCampo
 
-	void minar() {
-		minado = true;
-	} // fim minar
+	void minarCampo() {
+		minadoCampo = true;
+	} // fim minarCampo
 
-	public boolean isMinado() {
-		return minado;
-	} // fim isMinado
+	public boolean isMinadoCampo() {
+		return minadoCampo;
+	} // fim isMinadoCampo
 
-	public boolean isMarcado() {
-		return marcado;
-	} // fim isMarcado
+	public boolean isMarcadoCampo() {
+		return marcadoCampo;
+	} // fim isMarcadoCampo
 
-	void setAberto(boolean aberto) {
-		this.aberto = aberto;
-	} // setAberto
+	void setAbertoCampo(boolean aberto) {
+		this.abertoCampo = aberto;
+	} // setAbertoCampo
 
-	public boolean isAberto() {
-		return aberto;
-	} // fim isAberto
+	public boolean isAbertoCampo() {
+		return abertoCampo;
+	} // fim isAbertoCampo
 
-	public boolean isFechado() {
-		return !isAberto();
-	}
+	public boolean isFechadoCampo() {
+		return !isAbertoCampo();
+	} // fim isFechadoCampo
 
-	public int getLinha() {
-		return linha;
-	}
+	public int getLinhaCampo() {
+		return linhaCampo;
+	} // fim getLinhaCampo
 
-	public int getColuna() {
-		return coluna;
-	}
+	public int getColunaCampo() {
+		return colunaCampo;
+	} // fim getColunaCampo
 
-	boolean objetivoAlcancado() {
-		boolean desvendado = !minado && aberto;
-		boolean protegido = minado && marcado;
+	boolean objetivoAlcancadoCampo() {
+		boolean desvendado = !minadoCampo && abertoCampo;
+		boolean protegido = minadoCampo && marcadoCampo;
 
 		return desvendado || protegido;
-	} // fim objetivoAlcancado
+	} // fim objetivoAlcancadoCampo
 
-	long minasNaVizinhanca() {
-		return vizinhos.stream().filter(v -> v.minado).count();
-	} // fim minasNavizinhanca
+	long minasNaVizinhancaCampo() {
+		return vizinhos.stream().filter(v -> v.minadoCampo).count();
+	} // fim minasNavizinhancaCampo
 
-	void reiniciar() {
-		aberto = false;
-		minado = false;
-		marcado = false;
-	} // fim reiniciar
+	void reiniciarCampo() {
+		abertoCampo = false;
+		minadoCampo = false;
+		marcadoCampo = false;
+	} // fim reiniciarCampo
 
 	public String toString() {
-		if (marcado) {
+		if (marcadoCampo) {
 			return "x";
-		} else if (aberto && minado) {
+		} else if (abertoCampo && minadoCampo) {
 			return "*";
-		} else if (aberto && minasNaVizinhanca() > 0) {
-			return Long.toString(minasNaVizinhanca());
-		} else if (aberto) {
+		} else if (abertoCampo && minasNaVizinhancaCampo() > 0) {
+			return Long.toString(minasNaVizinhancaCampo());
+		} else if (abertoCampo) {
 			return " ";
 		} else {
 			return "?";
 		}
 	} // fim toString
-}
+} // fim da Class Campo
