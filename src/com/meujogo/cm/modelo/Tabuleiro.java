@@ -47,7 +47,7 @@ public class Tabuleiro {
 				campos.add(new Campo(l, c));
 			} // for c
 		} // for l
-	} // fim gerarCampos
+	} // fim gerarCamposTabuleiro
 
 	private void associarVizinhosTabuleiro() {
 		for (Campo c1 : campos) {
@@ -55,7 +55,7 @@ public class Tabuleiro {
 				c1.adicionarVizinhoCampo(c2);
 			} // for c2
 		} // for c1
-	} // fim associarOsVizinhos
+	} // fim associarVizinhosTabuleiro
 
 	private void sortearMinasTabuleiro() {
 		long minasArmadas = 0;
@@ -66,16 +66,16 @@ public class Tabuleiro {
 			campos.get(aleatorio).minarCampo();
 			minasArmadas = campos.stream().filter(minado).count();
 		} while (minasArmadas < minasTabuleiro);
-	} // sortearMinas
+	} // sortearMinasTabuleiro
 
 	public boolean objetivoAlcancadoTabuleiro() {
 		return campos.stream().allMatch(c -> c.objetivoAlcancadoCampo());
-	} // fim objetivoAlcancado
+	} // fim objetivoAlcancadoTabuleiro
 
 	public void reiniciarTabuleiro() {
 		campos.stream().forEach(c -> c.reiniciarCampo());
 		sortearMinasTabuleiro();
-	} // fim reiniciar
+	} // fim reiniciarTabuleiro
 
 	@Override
 	public String toString() {

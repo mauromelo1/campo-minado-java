@@ -31,7 +31,7 @@ public class TabuleiroConsole {
 					tabuleiro.reiniciarTabuleiro();
 				}
 
-			}
+			} // fim while
 		} catch (SairException e) {
 			System.out.println("Tchau!!!");
 		} finally {
@@ -45,7 +45,7 @@ public class TabuleiroConsole {
 				System.out.println(tabuleiro);
 				String digitado = capturarValorDigitado("Digite (x,y): ");
 
-				Iterator<Integer> xy = Arrays.stream(digitado.split(",")).map(e -> Integer.parseInt(e)).iterator();
+				Iterator<Integer> xy = Arrays.stream(digitado.split(",")).map(e -> Integer.parseInt(e.trim())).iterator();
 
 				digitado = capturarValorDigitado("1 - Abrir ou 2 - (Des)Marcar: ");
 				if ("1".equals(digitado)) {
